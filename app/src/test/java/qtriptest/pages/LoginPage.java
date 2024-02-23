@@ -12,8 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 public class LoginPage {
 
     RemoteWebDriver driver;
-    String homeUrl = "https://qtripdynamic-qa-frontend.vercel.app/";
-    String registerUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/register/";
+    //String homeUrl = "https://qtripdynamic-qa-frontend.vercel.app/";
+    //String registerUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/register/";
     String loginUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/login";
 
     @FindBy(xpath="//input[@name='email']")
@@ -41,9 +41,9 @@ public class LoginPage {
         loginToQtripButton.click();
 
         WebDriverWait wait = new WebDriverWait(this.driver, 30);
-        wait.until(ExpectedConditions.urlToBe(homeUrl));
+        wait.until(ExpectedConditions.urlToBe(RegisterPage.homeUrl));
     
-        return this.driver.getCurrentUrl().equals(homeUrl); 
+        return this.driver.getCurrentUrl().equals(RegisterPage.homeUrl); 
 
     } 
 

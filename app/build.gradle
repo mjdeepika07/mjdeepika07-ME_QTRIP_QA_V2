@@ -17,7 +17,9 @@ application {
 
 dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.0.0-alpha-1'
-    testImplementation group: 'org.testng', name: 'testng', version: '7.6.0'
+    //implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.10.0'
+    
+    testImplementation group: 'org.testng', name: 'testng', version: '7.9.0'
 
 
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
@@ -34,7 +36,7 @@ dependencies {
 buildDir = '/tmp/external_build'
 
 task startScript(type:Exec) {
-    commandLine '../selenium-run.sh'
+   commandLine '../selenium-run.sh'
 }
 
 run.dependsOn startScript
@@ -44,6 +46,7 @@ test.dependsOn startScript
 test {
     useTestNG() {
         useDefaultListeners = true // generates the test report
+      suites 'src/test/java/qtriptest/testng.xml'
     }
 
     afterSuite { desc, result ->
@@ -68,3 +71,5 @@ test {
     test.outputs.upToDateWhen {false}
 
 }
+
+mainClassName = 'qtriptest.App'

@@ -3,6 +3,7 @@ package qtriptest.tests;
 
 //import qtriptest.tests.ExternalDataProvider;
 import qtriptest.tests.ExcelDataProvider;
+import qtriptest.DriverSingleton;
 
 import qtriptest.pages.RegisterPage;
 import qtriptest.DP;
@@ -15,7 +16,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 public class TestCase_01 {
@@ -30,22 +33,28 @@ public class TestCase_01 {
 
     }
 
-    @BeforeSuite(enabled = true, alwaysRun = true)
-    public static void createDriver(){
-        final DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName(BrowserType.CHROME);
+    @BeforeSuite(alwaysRun = true)
+    public static void createDriver() throws MalformedURLException{
+        //final DesiredCapabilities capabilities = new DesiredCapabilities();
+        //capabilities.setBrowserName(BrowserType.CHROME);
         logStatus("Driver", "Initializing Driver", "Start");
-        try {
-            driver = new RemoteWebDriver(new URL("http://localhost:8082/wd/hub"), capabilities);
-            logStatus("Driver", "Initializing Driver", "Success");
-        } catch (MalformedURLException e) {
+        DriverSingleton ds = DriverSingleton.getInstanceOfSingletonBrowserClass();
+        driver = ds.getDriver();
+        System.out.println("Hashcode of driver is : " + driver.hashCode());
+
+        //try {
+            //driver = new RemoteWebDriver(new URL("http://localhost:8082/wd/hub"), capabilities);
+        driver.get(homeUrl);
+            //driver.manage().window().maximize();
+        logStatus("Driver", "Initializing Driver", "Success");
+        /* } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             System.out.println("MalformedURLException occured while connecting to the remote address");
             e.printStackTrace();
-        }
+        }*/
     }
 
-    @Test(enabled = true, dataProvider = "userOnboardDataFlow", dataProviderClass= DP.class)
+    @Test(priority = 1,dataProvider = "userOnboardDataFlow", dataProviderClass= DP.class,groups={"Login Flow"})
     
         public void TestCase01(String userName, String password) throws InterruptedException{
        
@@ -53,8 +62,7 @@ public class TestCase_01 {
         
         RegisterPage registerpage = new RegisterPage(driver);
         
-        Assert.assertTrue(registerpage.registerNewUser(userName,password,password,true),"User registration failed");
-        
+        Assert.assertTrue(registerpage.registerNewUser(userName, password, password, true),"User registration failed!!!!!");
         //System.out.println("lastGeneratedUsername : " + RegisterPage.lastGeneratedUsername);
         //System.out.println("lastGeneratedPassword : "+ RegisterPage.lastGeneratedPassword);
 
@@ -75,7 +83,9 @@ public class TestCase_01 {
         logStatus("User OnBoarding Flow", "User Registration - Login - Logout", "Success");
     }
     
-    @AfterSuite(enabled = true)
+    
+
+    @AfterSuite(alwaysRun = true)
     public static void quitDriver(){
         logStatus("Driver", "Quitting Driver", "Start");
         driver.close();

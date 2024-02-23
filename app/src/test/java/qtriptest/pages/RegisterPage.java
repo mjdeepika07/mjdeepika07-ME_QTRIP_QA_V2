@@ -1,76 +1,83 @@
 package qtriptest.pages;
 
-import java.sql.Timestamp;
+import java.util.UUID;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
 
 public class RegisterPage {
 
-    RemoteWebDriver driver;
-    public static String lastGeneratedUsername;
-    public static String lastGeneratedPassword;
-    String homeUrl = "https://qtripdynamic-qa-frontend.vercel.app/";
-    String registerUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/register/";
-    String loginUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/login";
+    static RemoteWebDriver driver;
+    static String homeUrl = "https://qtripdynamic-qa-frontend.vercel.app/";
+    static String registerUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/register/";
 
-    @FindBy(xpath="//input[@name='email']")
-    WebElement userNameTextbox;
-    @FindBy(xpath="//input[@name='password']")
-    WebElement passwordTextbox;
-    @FindBy(xpath="//input[@name='confirmpassword']")
-    WebElement confirmPasswordTextbox;
-    @FindBy(xpath="//button[text()='Register Now']")
-    WebElement registerButton;
+    String email = "";
+    //public String user_email = "";
+    public static String lastGeneratedUsername = "";
+    public static String lastGeneratedPassword = "";
+    
+    @FindBy(name = "email")
+    private WebElement userNameInput;
+
+    @FindBy(name = "password")
+    private WebElement passwordInput;
+
+    @FindBy(name = "confirmpassword")
+    private WebElement confirmPasswordInput;
+
+    @FindBy(xpath = "//button[@class='btn btn-primary btn-login']")
+    private WebElement registerNowElement;
 
     public RegisterPage(RemoteWebDriver driver){
-        this.driver = driver;
-        AjaxElementLocatorFactory ajax = new AjaxElementLocatorFactory(driver,10);
+        RegisterPage.driver = driver;
+        AjaxElementLocatorFactory ajax = new AjaxElementLocatorFactory(driver, 10);
         PageFactory.initElements(ajax, this);
 
     }
 
-    public boolean registerNewUser(String userName, String password, String confirmPassword, Boolean makeUsernameDynamic) throws InterruptedException{
+	public Boolean registerNewUser(String username, String password, String confirmpassword, Boolean makeUserDynamic) throws InterruptedException {
+
+        driver.get(registerUrl);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.urlToBe(registerUrl));
         
-        Thread.sleep(2000);
 
-        if(this.driver.getCurrentUrl() != registerUrl)
-            this.driver.get(registerUrl);
+        if(makeUserDynamic){
+            UUID uuid = UUID.randomUUID();
+            String uuidAsString = uuid. toString();
         
-        this.driver.manage().window().maximize();
-        Thread.sleep(4000);
+            //input = testuser@email.com  output = testuser88849589594@email.com
+            //System.out.println(username.split("@")[0]);
+            //System.out.println(username.split("@")[1]);
+            email = username.split("@")[0]+uuidAsString+"@"+username.split("@")[1];
+            //System.out.println(email);
+            userNameInput.sendKeys(email);
         
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        }
+        else{
+            userNameInput.sendKeys(username);
+        }
 
-        String test_userName;
+    Thread.sleep(3000);
 
-        if(makeUsernameDynamic)
-            test_userName = userName + String.valueOf(timestamp.getTime());
-            else
-                test_userName = userName;
+    lastGeneratedUsername = email;
+    lastGeneratedPassword = password;
 
-        userNameTextbox.sendKeys(test_userName);
-        passwordTextbox.sendKeys(password);
-        confirmPasswordTextbox.sendKeys(confirmPassword);
-        registerButton.click();
+    passwordInput.sendKeys(password);
+    Thread.sleep(3000);
 
-        lastGeneratedUsername = test_userName;
-        lastGeneratedPassword = password;
+    confirmPasswordInput.sendKeys(confirmpassword);
+    Thread.sleep(3000);
 
-        //System.out.println("lastGeneratedUsername : "+ lastGeneratedUsername);
-        //System.out.println("lastGeneratedPassword : "+ lastGeneratedPassword);
+    registerNowElement.click();
+    Thread.sleep(5000);
 
-        WebDriverWait wait = new WebDriverWait(this.driver, 30);
-        wait.until(ExpectedConditions.urlToBe(loginUrl));
-
-        return this.driver.getCurrentUrl().equals(loginUrl);
-
+    return driver.getCurrentUrl().endsWith("/login");
     }
-
 }

@@ -2,73 +2,88 @@ package qtriptest;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
+//import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 public class DP {
-    // TODO: use correct annotation to connect the Data Provider with your Test Cases
-    @DataProvider(name="userOnboardDataFlow")
-   
-    public Object[][] dpMethod() throws IOException {
+    
+    @DataProvider(name = "userOnboardDataFlow")
+    public Object[][] dpmethod(Method m){
+
+        List<List> listOfRows = new ArrayList<List>();
+        
+        
+
         int rowIndex = 0;
         int cellIndex = 0;
-        List<List> outputList = new ArrayList<List>();
 
-        // FileInputStream excelFile = new FileInputStream(new File(
-        //         "/home/crio-user/workspace/mjdeepika07-ME_QTRIP_QA_V2/app/src/test/resources/DatasetsforQTrip.xlsx"));
-        FileInputStream excelFile = new FileInputStream(new File("/home/crio-user/workspace/mjdeepika07-ME_QTRIP_QA_V2/app/src/test/resources/DatasetsforQTrip.xlsx"));
-        Workbook workbook = new XSSFWorkbook(excelFile);
-        //Sheet selectedSheet = workbook.getSheet(m.getName());
-        Sheet selectedSheet = workbook.getSheet("TestCase01");
-        Iterator<Row> iterator = selectedSheet.iterator();
-        while (iterator.hasNext()) {
-            Row nextRow = iterator.next();
-            Iterator<Cell> cellIterator = nextRow.cellIterator();
-            List<String> innerList = new ArrayList<String>();
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                if (rowIndex > 0 && cellIndex > 0) {
+        String filepath = "/home/crio-user/workspace/mjdeepika07-ME_QTRIP_QA_V2/app/src/test/resources/DatasetsforQTrip.xlsx";
+        File file = new File(filepath);
+        try{
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+        XSSFSheet sheet = workbook.getSheet(m.getName());
+        System.out.println("m.getName() : " + m.getName());
+        Iterator<Row> rowiterator = sheet.rowIterator();
+        
+
+        while(rowiterator.hasNext()){
+            Row row = rowiterator.next();
+            Iterator<Cell> celliterator = row.cellIterator();
+            List<String> listOfCells = new ArrayList<String>();
+
+            while(celliterator.hasNext()){
+                
+                Cell cell = celliterator.next();
+                
+                if(rowIndex > 0 && cellIndex > 0){
                     if (cell.getCellType() == CellType.STRING) {
-                        innerList.add(cell.getStringCellValue());
+                        listOfCells.add(cell.getStringCellValue());
                     } else if (cell.getCellType() == CellType.NUMERIC) {
-                        innerList.add(String.valueOf(cell.getNumericCellValue()));
+                        listOfCells.add(String.valueOf(cell.getNumericCellValue()));
+                    } else if (cell.getCellType() == CellType.BOOLEAN) {
+                        listOfCells.add(String.valueOf(cell.getBooleanCellValue()));
                     }
-                }
-                cellIndex = cellIndex + 1;
+                } 
+                cellIndex = cellIndex + 1;   
             }
             rowIndex = rowIndex + 1;
             cellIndex = 0;
-            if (innerList.size() > 0)
-                outputList.add(innerList);
 
+            if(listOfCells.size() > 0){
+                //System.out.println("listOfCells : " + listOfCells);
+                listOfRows.add(listOfCells);
+                //System.out.println("listOfRows : " + listOfRows);
+               
+
+            }
         }
-
-        excelFile.close();
+        
+        fileInputStream.close();
         workbook.close();
-
-        String[][] stringArray = outputList.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            e.getStackTrace();
+        }    
+        String[][] stringArray = listOfRows.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
         return stringArray;
-
     }
 
-    /*public static void main(String args[]){
+
+    /*public static void main(String[] args){
         DP dp = new DP();
-        try {
-            dp.dpMethod("TestCase01");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        dp.dpmethod();
     }*/
+
 }
