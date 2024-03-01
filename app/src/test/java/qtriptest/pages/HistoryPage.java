@@ -1,6 +1,7 @@
 
 package qtriptest.pages;
 
+import qtriptest.SeleniumWrapper;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -29,11 +30,14 @@ public class HistoryPage {
 
     }
 
-    public void CancelTransactionId(String transactionId){
+    public boolean CancelTransactionId(String transactionId){
 
         WebElement cancelButton = driver.findElement(By.xpath("//tbody/tr/td/div/button[@id='"+transactionId+"']"));
         System.out.println("transactionId : " + transactionId);
-        cancelButton.click();
+
+        //Wrapper method wrapper_click()
+        //cancelButton.click();
+        return SeleniumWrapper.wrapper_click(cancelButton, driver);
 
     }
 
@@ -90,18 +94,6 @@ public class HistoryPage {
                 return false;
 
     }
-
-    /*public String getTransactionIdUsingAdventureGuestName(String transactionId, String AdventureName, String GuestName, String Date, String count) throws InterruptedException{
-
-        //WebElement transactionIdUsingAdventureGuestNameWebElement = driver.findElement(By.xpath("//table/tbody/tr/td[text()='"+GuestName+"']/parent::tr/th[text()='"+transactionId+"']/parent::tr/td(2)[text()='"+AdventureName+"']"));
-        List<WebElement> transactionIdWebElement = driver.findElements(By.xpath("//table/tbody/tr/td[text()='"+AdventureName+"']/parent::tr/th[@scope='row']"));
-        
-
-
-        System.out.println("transactionIdUsingAdventureGuestNameWebElement : " + transactionIdUsingAdventureGuestNameWebElement.getText());
-      
-        return transactionIdUsingAdventureGuestNameWebElement.getText();
-    }*/
 
 
 }

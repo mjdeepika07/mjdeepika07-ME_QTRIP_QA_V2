@@ -1,6 +1,8 @@
 package qtriptest.pages;
 
+import qtriptest.SeleniumWrapper;
 import java.util.UUID;
+import com.relevantcodes.extentreports.LogStatus;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,9 +43,12 @@ public class RegisterPage {
 
     }
 
-	public Boolean registerNewUser(String username, String password, String confirmpassword, Boolean makeUserDynamic) throws InterruptedException {
+	public boolean registerNewUser(String username, String password, String confirmpassword, Boolean makeUserDynamic) throws InterruptedException {
 
-        driver.get(registerUrl);
+        //Wrapper method wrapper_navigate()
+        //driver.get(registerUrl);
+        SeleniumWrapper.wrapper_navigate(driver, registerUrl);
+
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlToBe(registerUrl));
         
@@ -57,26 +62,38 @@ public class RegisterPage {
             //System.out.println(username.split("@")[1]);
             email = username.split("@")[0]+uuidAsString+"@"+username.split("@")[1];
             //System.out.println(email);
-            userNameInput.sendKeys(email);
+            
+            //Wrapper method wrapper_sendKeys()
+            //userNameInput.sendKeys(email);
+            SeleniumWrapper.wrapper_sendKeys(userNameInput, email);
+            
         
         }
         else{
-            userNameInput.sendKeys(username);
+            //Wrapper method wrapper_sendKeys()
+            //userNameInput.sendKeys(username);
+            SeleniumWrapper.wrapper_sendKeys(userNameInput, username);
         }
 
     Thread.sleep(3000);
 
     lastGeneratedUsername = email;
     lastGeneratedPassword = password;
+    
+    //Wrapper method wrapper_sendKeys()
+    //passwordInput.sendKeys(password);
+    SeleniumWrapper.wrapper_sendKeys(passwordInput, password);
+    //Thread.sleep(3000);
 
-    passwordInput.sendKeys(password);
-    Thread.sleep(3000);
+    //Wrapper method wrapper_sendKeys()
+    //confirmPasswordInput.sendKeys(confirmpassword);
+    SeleniumWrapper.wrapper_sendKeys(confirmPasswordInput, confirmpassword);
+    //Thread.sleep(3000);
 
-    confirmPasswordInput.sendKeys(confirmpassword);
-    Thread.sleep(3000);
-
-    registerNowElement.click();
-    Thread.sleep(5000);
+    //Wrapper method wrapper_click()
+    //registerNowElement.click();
+    SeleniumWrapper.wrapper_click(registerNowElement, driver);
+    //Thread.sleep(5000);
 
     return driver.getCurrentUrl().endsWith("/login");
     }

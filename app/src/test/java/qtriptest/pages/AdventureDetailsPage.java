@@ -1,6 +1,7 @@
 package qtriptest.pages;
 
 
+import qtriptest.SeleniumWrapper;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -41,14 +42,25 @@ public class AdventureDetailsPage {
     }
     public void bookAdventure(String guestName, String date,String countOfGuests){
 
-        guestNameElement.clear();
-        guestNameElement.sendKeys(guestName);
-        reservationDateElement.clear();
-        reservationDateElement.sendKeys(date);
-        guestCountElement.clear();
-        guestCountElement.sendKeys(countOfGuests);
+        //Wrapper method wrapper_sendKeys()
+        //guestNameElement.clear();
+        //guestNameElement.sendKeys(guestName);
+        SeleniumWrapper.wrapper_sendKeys(guestNameElement, guestName);
 
-        reserveButtonElement.click();
+         //Wrapper method wrapper_sendKeys()
+        //reservationDateElement.clear();
+        //reservationDateElement.sendKeys(date);
+        SeleniumWrapper.wrapper_sendKeys(reservationDateElement, date);
+
+        //Wrapper method wrapper_sendKeys()
+        //guestCountElement.clear();
+        //guestCountElement.sendKeys(countOfGuests);
+        SeleniumWrapper.wrapper_sendKeys(guestCountElement, countOfGuests);
+
+
+        //wrapper method wrapper_click()
+        //reserveButtonElement.click();
+        SeleniumWrapper.wrapper_click(reserveButtonElement, driver);
 
 
     }
@@ -61,12 +73,11 @@ public class AdventureDetailsPage {
 
     public void navigateToHistoryPage(){
 
-        reservationsLinkElement.click();
+        //Wrapper method wrapper_click()
+        //reservationsLinkElement.click();
+        SeleniumWrapper.wrapper_click(reservationsLinkElement, driver);
         
     }
 
     
-    //tbody/tr/th[text()='4d3199d23b76cdae'
-
-    //tbody/tr/td/div/button[@id='4d3199d23b76cdae']
 }

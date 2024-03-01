@@ -1,5 +1,6 @@
 package qtriptest.pages;
 
+import qtriptest.SeleniumWrapper;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -64,23 +65,31 @@ public int getResultCount(){
 
 public void selectAdventure(String adventureName){
 
-    adventuresSelect.sendKeys(adventureName);
+    //Wrapper method wrapper_sendKeys()
+    //adventuresSelect.sendKeys(adventureName);
+    SeleniumWrapper.wrapper_sendKeys(adventuresSelect, adventureName);
 
 }
 
 public void durationFilterClear(String durationFilterName){
 
-    durationClearSelect.click();
+    //Wrapper method wrapper_click()
+    //durationClearSelect.click();
+    SeleniumWrapper.wrapper_click(durationClearSelect, driver);
 }
 
 public void categoryFilterClear(String categoryFilterName){
 
-    categoryClearSelect.click();
+    //Wrapper method wrapper_click()
+    //categoryClearSelect.click();
+    SeleniumWrapper.wrapper_click(categoryClearSelect, driver);
 }
 
 public boolean selectSearchedResult(){
 
-    searchResultActivityCard.click();
+    //Wrapper method wrapper_click()
+    //searchResultActivityCard.click();
+    SeleniumWrapper.wrapper_click(searchResultActivityCard, driver);
     
     return driver.getCurrentUrl().contains("https://qtripdynamic-qa-frontend.vercel.app/pages/adventures/detail/?adventure=");
 }

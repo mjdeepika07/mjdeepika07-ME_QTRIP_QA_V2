@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+<configuration>
+<documentTitle>QTrip Regression Suite</documentTitle>
+<protocol>http</protocol>
+<encoding>UTF-8</encoding>
+<theme>standard</theme>
+<reportName align="center">
+<message>Regression test for QTrip</message>
+</reportName>
+<testViewChartLocation>bottom</testViewChartLocation>
+</configuration>
+</extentreports>

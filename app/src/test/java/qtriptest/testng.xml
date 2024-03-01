@@ -11,7 +11,7 @@
         <class name="qtriptest.tests.TestCase_01"/>
       </classes>
   </test>
-    <test name ="testCase_02">
+  <test name ="testCase_02">
     <groups>
       <run>
         <include name="Search and Filter flow"></include>
@@ -28,7 +28,7 @@
       </run>
     </groups>
       <classes>
-        <class name="qtriptest.tests.testCase_03"/>
+        <class name="qtriptest.tests.TestCase_03"/>
       </classes>
   </test>
   <test name ="testCase_04">
@@ -38,7 +38,7 @@
       </run>
     </groups>
       <classes>
-        <class name="qtriptest.tests.testCase_04"/>
+        <class name="qtriptest.tests.TestCase_04"/>
       </classes>
   </test>
 </suite>
